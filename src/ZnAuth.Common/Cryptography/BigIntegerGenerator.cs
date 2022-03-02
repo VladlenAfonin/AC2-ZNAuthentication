@@ -40,11 +40,11 @@ public static class BigIntegerGenerator
     public static (BigInteger, BigInteger) GetTwoCoprimePrimeNumbers(
         int numberOfBytes)
     {
-        var x = GetPrime(128);
-        var y = GetPrime(128);
+        var x = GetPrime(numberOfBytes);
+        var y = GetPrime(numberOfBytes);
 
         if (BigInteger.GreatestCommonDivisor(x, y) != 1)
-            y = GetPrime(128);
+            y = GetPrime(numberOfBytes);
 
         return (x, y);
     }
