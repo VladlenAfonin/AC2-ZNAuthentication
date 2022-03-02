@@ -26,4 +26,12 @@ public class BigIntegerGeneratorTests
         Assert.True(y.IsPrime());
         Assert.True(BigInteger.GreatestCommonDivisor(x, y) == 1);
     }
+
+    [Fact]
+    public void GenerateNumberInRange_WhenCalled_GeneratesNumeberInRange()
+    {
+        var number = BigIntegerGenerator.GenerateNumberInRange(100, 150);
+
+        Assert.InRange(number, 100, 150);
+    }
 }
