@@ -1,7 +1,8 @@
-﻿using ZnAuth.Common.Extensions;
-using ZnAuth.Common.Cryptography;
+﻿using ZnAuth.Common.Cryptography;
+using System.Numerics;
 
-var prime = BigIntegerGenerator.NewPrimeBigInteger(128);
+var (x, y) = BigIntegerGenerator.GenerateTwoCoprimePrimeNumbers(128);
 
-Console.WriteLine($"{prime:x}");
-Console.WriteLine($"{prime.IsPrime()}");
+Console.WriteLine($"x:\n{x:x}");
+Console.WriteLine($"y:\n{y:x}");
+Console.WriteLine($"GCD(x, y):\n{BigInteger.GreatestCommonDivisor(x, y):x}");

@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Numerics;
+using Xunit;
 using ZnAuth.Common.Cryptography;
 using ZnAuth.Common.Extensions;
 
@@ -7,12 +8,22 @@ namespace ZnAuth.Common.Tests;
 public class BigIntegerGeneratorTests
 {
     [Fact]
-    public void NewPrimeBigInteger_WhenCalled_GeneratesPrimeNumber()
+    public void GeneratePrimeBigInteger_WhenCalled_GeneratesPrimeNumber()
     {
-        var prime = BigIntegerGenerator.NewPrimeBigInteger(128);
+        var prime = BigIntegerGenerator.GeneratePrimeBigInteger(128);
 
         var result = prime.IsPrime();
 
         Assert.True(result);
+    }
+
+    [Fact]
+    public void GenerateTwoCoprimePrimeNumbers_WhenCalled_GeneratesTwoCoprimePrimeNumbers()
+    {
+        var (x, y) = BigIntegerGenerator.GenerateTwoCoprimePrimeNumbers(128);
+
+        Assert.True(x.IsPrime());
+        Assert.True(y.IsPrime());
+        Assert.True(BigInteger.GreatestCommonDivisor(x, y) == 1);
     }
 }
