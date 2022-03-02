@@ -31,7 +31,7 @@ public static class BigIntegerExtensions
         {
             do
             {
-                a = BigIntegerGenerator.GeneratePositiveBigInteger(
+                a = BigIntegerGenerator.GetPositive(
                     value.ToByteArray().Length);
             }
             while (a < 2 || a >= value - 2);

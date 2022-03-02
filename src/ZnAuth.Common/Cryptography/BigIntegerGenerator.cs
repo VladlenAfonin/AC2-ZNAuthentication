@@ -10,7 +10,7 @@ public static class BigIntegerGenerator
 	/// <summary>Get new positive <see cref="BigInteger"/>.</summary>
     /// <param name="numberOfBytes">Number of bytes.</param>
     /// <returns>New positive random <see cref="BigInteger"/>.</returns>
-	public static BigInteger GeneratePositiveBigInteger(int numberOfBytes) =>
+	public static BigInteger GetPositive(int numberOfBytes) =>
 		BigInteger.Abs(new BigInteger(RandomNumberGenerator.GetBytes(
             numberOfBytes)));
 
@@ -24,12 +24,12 @@ public static class BigIntegerGenerator
     /// The method is quite slow. Use for no more than 128-256 bytes. If needed,
     /// the size is arbitrary though.
     /// </remarks>
-	public static BigInteger GeneratePrimeBigInteger(int numberOfBytes)
+	public static BigInteger GetPrime(int numberOfBytes)
     {
-		var result = GeneratePositiveBigInteger(numberOfBytes);
+		var result = GetPositive(numberOfBytes);
 
 		while (!result.IsPrime())
-			result = GeneratePositiveBigInteger(numberOfBytes);
+			result = GetPositive(numberOfBytes);
 
 		return result;
     }
@@ -37,14 +37,14 @@ public static class BigIntegerGenerator
     /// <summary>Generate two coprime prime numbers.</summary>
     /// <param name="numberOfBytes">Number of bytes in each number.</param>
     /// <returns>Tuple with two generated numbers.</returns>
-    public static (BigInteger, BigInteger) GenerateTwoCoprimePrimeNumbers(
+    public static (BigInteger, BigInteger) GetTwoCoprimePrimeNumbers(
         int numberOfBytes)
     {
-        var x = GeneratePrimeBigInteger(128);
-        var y = GeneratePrimeBigInteger(128);
+        var x = GetPrime(128);
+        var y = GetPrime(128);
 
         if (BigInteger.GreatestCommonDivisor(x, y) != 1)
-            y = GeneratePrimeBigInteger(128);
+            y = GetPrime(128);
 
         return (x, y);
     }
@@ -58,17 +58,30 @@ public static class BigIntegerGenerator
     /// <remarks>
     /// This method is not tested for its cryptographic properties.
     /// </remarks>
-    public static BigInteger GenerateNumberInRange(
+    public static BigInteger GetInRange(
         BigInteger minimum,
         BigInteger maximum)
     {
         var numberOfBytes = ((minimum + maximum) / 2).ToByteArray().Length;
-        var number = GeneratePositiveBigInteger(numberOfBytes);
+        var number = GetPositive(numberOfBytes);
 
         while (number < minimum || number > maximum)
-            number = GeneratePositiveBigInteger(numberOfBytes);
+            number = GetPositive(numberOfBytes);
 
         return number;
+    }
+
+    public static BigInteger GetCoprimeToInRange(
+        BigInteger number,
+        BigInteger minimum,
+        BigInteger maximum)
+    {
+        var result = GetInRange(minimum, maximum);
+
+        while (BigInteger.GreatestCommonDivisor(result, number) != 1)
+            result = GetInRange(minimum, maximum);
+
+        return result;
     }
 }
 

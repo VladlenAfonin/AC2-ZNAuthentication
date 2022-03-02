@@ -8,9 +8,9 @@ namespace ZnAuth.Common.Tests;
 public class BigIntegerGeneratorTests
 {
     [Fact]
-    public void GeneratePrimeBigInteger_WhenCalled_GeneratesPrimeNumber()
+    public void GetPrime_WhenCalled_ReturnsPrimeNumber()
     {
-        var prime = BigIntegerGenerator.GeneratePrimeBigInteger(128);
+        var prime = BigIntegerGenerator.GetPrime(128);
 
         var result = prime.IsPrime();
 
@@ -18,9 +18,9 @@ public class BigIntegerGeneratorTests
     }
 
     [Fact]
-    public void GenerateTwoCoprimePrimeNumbers_WhenCalled_GeneratesTwoCoprimePrimeNumbers()
+    public void GetTwoCoprimePrimeNumbers_WhenCalled_ReturnsTwoCoprimePrimeNumbers()
     {
-        var (x, y) = BigIntegerGenerator.GenerateTwoCoprimePrimeNumbers(128);
+        var (x, y) = BigIntegerGenerator.GetTwoCoprimePrimeNumbers(128);
 
         Assert.True(x.IsPrime());
         Assert.True(y.IsPrime());
@@ -28,10 +28,27 @@ public class BigIntegerGeneratorTests
     }
 
     [Fact]
-    public void GenerateNumberInRange_WhenCalled_GeneratesNumeberInRange()
+    public void GetInRange_WhenCalled_ReturnsNumeberInRange()
     {
-        var number = BigIntegerGenerator.GenerateNumberInRange(100, 150);
+        BigInteger minimum = 100;
+        BigInteger maximum = 150;
 
-        Assert.InRange(number, 100, 150);
+        var number = BigIntegerGenerator.GetInRange(minimum, maximum);
+
+        Assert.InRange(number, minimum, maximum);
+    }
+
+    [Fact]
+    public void GetCoprimeToInRange_WhenCalled_ReturnsCoprimeToInRange()
+    {
+        BigInteger minimum = 100000;
+        BigInteger maximum = 10000000;
+        var number = BigIntegerGenerator.GetPositive(128);
+
+        var result = BigIntegerGenerator.GetCoprimeToInRange(
+            number, minimum, maximum);
+
+        Assert.InRange(result, minimum, maximum);
+        Assert.True(BigInteger.GreatestCommonDivisor(result, number) == 1);
     }
 }
