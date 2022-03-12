@@ -12,12 +12,12 @@ public class Prover
 	/// <summary>Modulus agreed upon.</summary>
 	public BigInteger Modulus { get; }
 
+	/// <summary>Current random bit.</summary>
+	public int CurrentRandomBit { get; set; }
+
 	/// <summary>Public nonce generated from the secret nonce.</summary>
 	public BigInteger PublicNonce =>
 		BigInteger.ModPow(_secretNonce, 2, Modulus);
-
-	/// <summary>Current random bit.</summary>
-	public int CurrentRandomBit { get; set; }
 
 	/// <summary>Generates a round proof.</summary>
 	public BigInteger Proof => _secretNonce *

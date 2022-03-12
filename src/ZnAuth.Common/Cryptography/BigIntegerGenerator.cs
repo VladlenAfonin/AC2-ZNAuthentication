@@ -34,6 +34,20 @@ public static class BigIntegerGenerator
 		return result;
     }
 
+    /// <summary>Generate number coprime to given one.</summary>
+    /// <param name="number">Number generated one will be coprime to.</param>
+    /// <param name="numberOfBytes">Length in number of bytes.</param>
+    /// <returns>Number coprime to given one.</returns>
+    public static BigInteger GetCoprimeTo(BigInteger number, int numberOfBytes)
+    {
+        var result = GetPositive(numberOfBytes);
+
+        while (BigInteger.GreatestCommonDivisor(result, number) != 1)
+            result = GetPositive(numberOfBytes);
+
+        return result;
+    }
+
     /// <summary>Generate two coprime prime numbers.</summary>
     /// <param name="numberOfBytes">Number of bytes in each number.</param>
     /// <returns>Tuple with two generated numbers.</returns>
@@ -43,7 +57,7 @@ public static class BigIntegerGenerator
         var x = GetPrime(numberOfBytes);
         var y = GetPrime(numberOfBytes);
 
-        if (BigInteger.GreatestCommonDivisor(x, y) != 1)
+        while (BigInteger.GreatestCommonDivisor(x, y) != 1)
             y = GetPrime(numberOfBytes);
 
         return (x, y);
@@ -71,6 +85,15 @@ public static class BigIntegerGenerator
         return number;
     }
 
+    /// <summary>
+    /// Get number coprime to <paramref name="number"/> in the range given.
+    /// </summary>
+    /// <param name="number">
+    /// Number that should be coprime to generated one.
+    /// </param>
+    /// <param name="minimum">Lower bound.</param>
+    /// <param name="maximum">Upper bound.</param>
+    /// <returns></returns>
     public static BigInteger GetCoprimeToInRange(
         BigInteger number,
         BigInteger minimum,
@@ -84,4 +107,3 @@ public static class BigIntegerGenerator
         return result;
     }
 }
-
