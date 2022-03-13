@@ -11,7 +11,7 @@ var n = p * q;
 var prover = new Prover(n);
 
 // Enable for unsuccessful authentication result.
-// prover.SecretKey = 5;
+//prover.SecretKey = 5;
 
 var verifier = new Verifier(n, prover.PublicKey);
 

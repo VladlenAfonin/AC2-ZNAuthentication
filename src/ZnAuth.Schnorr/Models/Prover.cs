@@ -3,44 +3,59 @@ using ZnAuth.Common.Cryptography;
 
 namespace ZnAuth.Schnorr.Models;
 
+/// <summary>Prover model for Schnorr protocol.</summary>
 public class Prover
 {
 	/// <summary>Prover's public key.</summary>
-    public BigInteger v { get; set; }
+    public BigInteger V { get; set; }
 
 	/// <summary>Prover's current public nonce.</summary>
-    public BigInteger x { get; set; }
+    public BigInteger X { get; set; }
 
 	/// <summary>Prover's current secret nonce.</summary>
-	public BigInteger r;
+	public BigInteger R;
 
-	public BigInteger a;
+	/// <summary>Prover's secret nonce.</summary>
+	public BigInteger A;
 
+	/// <summary>Protocol parameters.</summary>
 	private readonly (BigInteger p, BigInteger q, BigInteger g)
         _protocolParameters;
 
+	/// <summary>
+	/// Initialize a new <see cref="Prover"/>.
+	/// </summary>
+	/// <param name="p">Protocol parameter p.</param>
+	/// <param name="q">Protocol parameter q.</param>
+	/// <param name="g">Protocol parameter g.</param>
 	public Prover(BigInteger p, BigInteger q, BigInteger g)
 	{
 		_protocolParameters = (p, q, g);
 
-		a = BigIntegerGenerator.GetInRange(1, q - 1);
-		v = BigInteger.ModPow(g, q - a, p);
-		// PublicKey = BigInteger.Abs((g - _secretKey) % p);
+		A = BigIntegerGenerator.GetInRange(1, q - 1);
+		V = BigInteger.ModPow(g, q - A, p);
 	}
 
-	public BigInteger GeneratePublicNonce()
+	/// <summary>
+    /// Generate secret and public nonces and returns public one.
+    /// </summary>
+    /// <returns>Public nonce.</returns>
+	public BigInteger GenerateNonce()
     {
-		r = BigIntegerGenerator.GetInRange(
+		R = BigIntegerGenerator.GetInRange(
 			0, _protocolParameters.q);
 
-		x = BigInteger.ModPow(
+		X = BigInteger.ModPow(
             value: _protocolParameters.g,
-            exponent: r,
+            exponent: R,
             modulus: _protocolParameters.p);
 
-		return x;
+		return X;
     }
 
+	/// <summary>Generate prover's request for authentication.</summary>
+    /// <param name="e">Verifier's nonce.</param>
+    /// <returns>Request.</returns>
 	public BigInteger GenerateRequest(BigInteger e) =>
-		(r + a * e) % _protocolParameters.q;
+		(R + A * e) % _protocolParameters.q;
 }
