@@ -12,8 +12,8 @@ public static class Helper
     /// <param name="qLengthBytes">Length of q.</param>
     /// <returns>The three parameters generated.</returns>
     public static (BigInteger p, BigInteger q, BigInteger g) GetParameters(
-        int pLengthBytes = 128, // 1024 bits
-        int qLengthBytes = 20) // 160 bits
+        int pLengthBytes = 128, // 128 bytes = 1024 bits
+        int qLengthBytes = 20) // 20 bytes = 160 bits
     {
         var q = BigIntegerGenerator.GetPrime(qLengthBytes); 
         var p = BigIntegerGenerator
