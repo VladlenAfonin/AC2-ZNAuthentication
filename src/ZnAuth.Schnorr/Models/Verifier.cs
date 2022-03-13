@@ -5,13 +5,13 @@ namespace ZnAuth.Schnorr.Models;
 
 public class Verifier
 {
-    public BigInteger ProversPublicKey { get; set; }
+    public BigInteger v { get; set; }
 
-	public BigInteger ProversCurrentNonce { get; set; }
+	public BigInteger x { get; set; }
 
     public BigInteger SecurityParameter { get; set; }
 
-    private BigInteger _currentNonce;
+    public BigInteger e;
 
     private readonly (BigInteger p, BigInteger q, BigInteger g)
         _protocolParameters;
@@ -29,15 +29,15 @@ public class Verifier
 
     public BigInteger GenerateNonce()
     {
-        _currentNonce = BigIntegerGenerator.GetInRange(
+        e = BigIntegerGenerator.GetInRange(
             0, BigInteger.Pow(2, (int) SecurityParameter) + 1);
 
-        return _currentNonce;
+        return e;
     }
 
-    public bool Verify(BigInteger request) =>
-        ProversCurrentNonce ==
-            BigInteger.ModPow(_protocolParameters.g, request, _protocolParameters.p) *
-            BigInteger.ModPow(ProversPublicKey, _currentNonce, _protocolParameters.p) %
+    public bool Verify(BigInteger y) =>
+        x ==
+            BigInteger.ModPow(_protocolParameters.g, y, _protocolParameters.p) *
+            BigInteger.ModPow(v, e, _protocolParameters.p) %
             _protocolParameters.p;
 }

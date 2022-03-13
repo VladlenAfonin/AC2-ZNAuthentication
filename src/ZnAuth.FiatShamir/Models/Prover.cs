@@ -21,13 +21,13 @@ public class Prover
 
 	/// <summary>Generates a round proof.</summary>
 	public BigInteger Proof => _secretNonce *
-		BigInteger.Pow(_secretKey, CurrentRandomBit) % Modulus;
+		BigInteger.Pow(SecretKey, CurrentRandomBit) % Modulus;
 
 	/// <summary>Prover's secret round nonce.</summary>
 	private BigInteger _secretNonce;
 
 	/// <summary>Prover's secret key.</summary>
-    private BigInteger _secretKey;
+    public BigInteger SecretKey;
 
 	/// <summary>Initialize a new <see cref="Prover"/> object.</summary>
     /// <param name="n">Modulus agreed upon.</param>
@@ -50,10 +50,10 @@ public class Prover
 
 	/// <summary>Generate secret key.</summary>
 	private void GenerateSecretKey() =>
-        _secretKey = BigIntegerGenerator.GetCoprimeToInRange(
+        SecretKey = BigIntegerGenerator.GetCoprimeToInRange(
 			Modulus, 1, Modulus - 1);
 
 	/// <summary>Generate public key from the secret key.</summary>
 	private void GeneratePublicKey() =>
-		PublicKey = BigInteger.ModPow(_secretKey, 2, Modulus);
+		PublicKey = BigInteger.ModPow(SecretKey, 2, Modulus);
 }

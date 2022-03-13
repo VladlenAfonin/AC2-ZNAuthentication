@@ -9,6 +9,10 @@ var n = p * q;
 
 // Participants initialization.
 var prover = new Prover(n);
+
+// Enable for unsuccessful authentication result.
+// prover.SecretKey = 5;
+
 var verifier = new Verifier(n, prover.PublicKey);
 
 for (int i = 0; i < numberOfRounds; i++)

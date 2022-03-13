@@ -1,19 +1,22 @@
-﻿using System.Numerics;
-using ZnAuth.Common.Cryptography;
-using ZnAuth.Common.Extensions;
-using ZnAuth.Schnorr.Models;
+﻿using ZnAuth.Schnorr.Models;
 
 var (p, q, g) = Helper.GetParameters(); // pLengthBytes: 4, qLengthBytes: 2);
+var t = 10;
 
 var prover = new Prover(p, q, g);
-var verifier = new Verifier(p, q, g, 10);
 
-verifier.ProversCurrentNonce = prover.GeneratePublicNonce();
+// Enable for unsuccessful authentication result.
+// prover.a = 5;
 
-var verifiersNonce = verifier.GenerateNonce();
+var verifier = new Verifier(p, q, g, t);
 
-var request = prover.GenerateRequest(verifiersNonce);
+verifier.x = prover.GeneratePublicNonce();
+verifier.v = prover.v;
 
-var result = verifier.Verify(request);
+var e = verifier.GenerateNonce();
+
+var y = prover.GenerateRequest(e);
+
+var result = verifier.Verify(y);
 
 Console.WriteLine($"Result: {result}.");
